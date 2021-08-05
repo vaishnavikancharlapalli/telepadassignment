@@ -1,0 +1,105 @@
+<html><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <style>
+    button {
+        border-radius: 60px;
+        padding: 10px;
+        width: 116px;
+        height: 90px;
+        font-weight: bold;
+        font-size: 22px;
+        cursor: pointer;
+        border: 2px solid black;
+    }
+    button:hover {
+        background-color: #6e6e6e;
+    }
+        
+    .small1 {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+    input {
+        width: 340px;
+        height: 60px;
+        font-size: 40px;
+        border: 2px solid black;
+    }
+    </style>
+    </head>
+    <body>
+    <div style="margin-left: 35%;border-radius: 45px;width: 29%;background: #b4b2b2;padding: 35px;border: 5px solid black;">
+    <p>
+      <input type="text">
+    </p>
+    <p>
+      <button data-text=".,!1" data-number="1">1 <small class="small1">.,!</small></button>
+      <button data-text="abc2" data-number="2">2 <small class="small1">abc</small></button>
+      <button data-text="def3" data-number="3">3 <small class="small1">def</small></button>
+    </p>
+    <p>
+      <button data-text="ghi4" data-number="4">4 <small class="small1">ghi</small></button>
+      <button data-text="jkl5" data-number="5">5 <small class="small1">jkl</small></button>
+      <button data-text="mno6" data-number="6">6 <small class="small1">mno</small></button>
+    </p>
+    <p>
+      <button data-text="pqrs7" data-number="7">7 <small class="small1">pqrs</small></button>
+      <button data-text="tuv8" data-number="8">8 <small class="small1">tuv</small></button>
+      <button data-text="wxyz9" data-number="9">9 <small class="small1">wxyz</small></button>
+    </p>
+    <p>
+      <button data-text="*" data-number="*">* <small></small></button>
+      <button data-text="0" data-number="0">0 <small></small></button>
+       <button data-text="#" data-number="#"># <small></small></button>
+    </p>
+    </div>
+    <script>
+    var button = document.querySelectorAll('button'),
+        input = document.querySelector('input'),
+        busy = true,
+        hold,
+        is_busy,
+        delay = 1000,
+        change = -1,
+        click = null;
+    for (var i = 0, len = button.length; i < len; ++i) {
+        button[i].onmousedown = function(e) {
+            var text = this.getAttribute('data-text').split(""),
+                number = this.getAttribute('data-number');
+            busy = true;
+            clearTimeout(is_busy);
+            if (click !== e.target) {
+                busy = false;
+            }
+            if (change >= text.length - 1 || click !== e.target) {
+                change = 0;
+                click = e.target;
+            } else {
+                change = change + 1;
+            }
+           
+            hold = setTimeout(function() {
+                input.value = input.value.slice(0, -1) + number;
+            }, delay);
+            input.value = busy ? input.value.slice(0, -1) + text[change] : input.value + text[change];
+        };
+        button[i].onmouseup = function(e) {
+            clearTimeout(hold);
+            busy = true;
+            is_busy = setTimeout(function() {
+                change = -1;
+                busy = false;
+                e.target = null;
+            }, delay);
+            input.focus();
+            input.selectionStart = input.selectionEnd = input.value.length;
+        };
+    }
+    </script>
+    
+    
+    
+    </body></html>
